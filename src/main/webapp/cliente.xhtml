@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"> 
+
+<h:head></h:head> 
+<h:body> 
+	<h1>Cadastro de cliente</h1>
+	
+	<h:form id="frmCliente">
+		Nome:<h:inputText value="#{clienteController.cliente.nome}"/>
+		Email:<h:inputText value="#{clienteController.cliente.email}"/>
+		Estado:<h:selectOneMenu value="#{clienteController.cliente.estado}" converter="#{estadoConverter}">
+			<f:selectItem noSelectionOption="true" itemValue="" itemLabel=".:Selecione:."/>
+			<f:selectItems value="#{estadoController.estados}" var="e" itemLabel="#{e.uf}"/>
+		</h:selectOneMenu>
+		
+		<h:commandButton value="Salvar" action="#{clienteController.salvar()}">
+			<f:ajax execute="frmCliente" render="frmCliente"/>
+		</h:commandButton>
+		
+		<h:commandButton rendered="#{clienteController.modoEdicao}" value="Cancelar" action="#{clienteController.cancelar}">
+			<f:ajax render="frmCliente"/>
+		</h:commandButton>
+		
+		<h:dataTable id="dtCliente" value="#{clienteController.clientes}" var="c">
+			<h:column>
+				<f:facet name="header">Id</f:facet>
+				#{c.id}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				#{c.nome}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				#{c.email}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Email</f:facet>
+				#{c.estado.uf}
+			</h:column>
+			<h:column>
+				<f:facet name="header">Ação</f:facet>
+				<h:commandButton action="#{clienteController.excluir(c)}" value="Excluir" onclick=" return window.confirm('Certeza?')">
+					<f:ajax render="frmCliente:dtCliente"/>
+				</h:commandButton>
+				
+				<h:commandButton value="Editar" action="#{clienteController.editar(c)}">
+				
+				</h:commandButton>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body> 
+</html>
